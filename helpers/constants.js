@@ -103,7 +103,7 @@ module.exports = {
 		// Mainnet
 		'2ce90b556d1770e00e35c97e2c4c258b6d4505f5836ce2121659ef25f802c791',
 		// Testnet
-		'cba57b868c8571599ad594c6607a77cad60cf0372ecde803004d87e679117c12'
+		'1bce8da0d6e616482de1ebf920ef3875e166332affdd70f9a8a689babce54420'
 	],
 	numberLength: 100000000,
 	requestLength: 104,
