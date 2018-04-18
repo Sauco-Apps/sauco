@@ -25,7 +25,7 @@
 
 var async = require('async');
 var checkIpInList = require('./helpers/checkIpInList.js');
-var extend = require('extend');
+var extend = require('extend'); 
 var fs = require('fs');
 
 var genesisblock = require('./genesisBlock.json');
