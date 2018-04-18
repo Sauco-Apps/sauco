@@ -6,7 +6,7 @@ Automatic install script for Debian based systems Ubuntu, Mint, Debian.
 
 Install Sauco (Mainnet)
 ```
-git clone https://github.com/Sauco-Apps/sauco.git && sauco/sauco_manager.bash install
+git clone -b testnet https://github.com/Sauco-Apps/sauco.git && sauco/sauco_manager.bash install
 ```
 Update Sauco Manager
 ```
