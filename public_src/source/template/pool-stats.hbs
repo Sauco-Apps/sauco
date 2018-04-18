@@ -1,0 +1,136 @@
+<div class="container middle">
+	<div class="pstat">
+		<h1 class="page_title">Estadisticas</h1>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="box">
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Red:</span>
+								<br>{{network}}
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Nombre Delegado:</span>
+								<br>{{username}}
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Rango:</span>
+								<br>#{{rate}}
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Saldo Pool:</span>
+								<br>{{balance}} Ⱡ
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Aprobación:</span>
+								<br>
+								<span class="mark">{{approval}}%</span>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Votos Activos:</span>
+								<br>{{voters_count}}
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">Dirección Delegado:</span>
+								<br>
+								<a href="{{explorer_url}}" class="mark" target="_blank">{{address}}</a>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="item">
+								<span class="title">respaldo Total Sauco:</span>
+								<br>{{total_support}} Ⱡ
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="box">
+					<div class="pieChart" role="progressbar" data-goal="{{productivity}}">
+						<div class="pie_progress__label">Productividad</div>
+						<div class="pie_progress__number">0%</div>
+					</div>
+					<div class="forgStat">
+						<div class="fb">{{forgedblocks}} Bloques Forjados</div>
+						<div class="mb">{{missedblocks}} Bloques Perdidos</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-tabs">
+					<ul class="tabsbtn">
+						<li class="active" data-tab="voters">Votantes</li>
+						<li data-tab="reward">Recompensa</li>
+					</ul>
+					<div class="tabs">
+						<div class="tab" id="voters" style="display:block;">
+							<div class="scroll_wrap">
+								<table class="table">
+									<thead>
+										<tr class="tr_head">
+											<th class="tr1">Nombre</th>
+											<th class="tr2">Wallet</th>
+											<th class="tr3">Balance</th>
+											<th class="tr4">% de pool</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#each voters}}
+											<tr class="tr_item">
+												<td class="tr1"><div class="d-icon {{icon}}">{{username}}</div></td>
+												<td class="tr2"><a href="{{explorer_url}}" target="_blank" title="{{username}}">{{address}}</a></td>
+												<td class="tr3">{{balance}} Ⱡ</td>
+												<td class="tr4">{{pool_percent}}%</td>
+											</tr>
+										{{/each}}
+									</tbody>
+								</table>
+							</div>
+							<div class="showmore">Ver Mas</div>						
+						</div>
+						<div class="tab" id="reward">
+							<div class="scroll_wrap">
+								<table class="table">
+									<thead>
+										<tr class="tr_head">
+											<th class="tr1">Wallet</th>
+											<th class="tr3">Recompensa</th>
+											<th class="tr3">Todo el Tiempo</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#each voters_reward}}
+											<tr class="tr_item">
+												<td class="tr1"><div class="d-icon {{icon}}"><a href="/voter-stats/address/{{address}}" target="_blank" title="{{address}}">{{address}}</a></div></td>
+												<td class="tr3">{{reward}} Ⱡ</td>
+												<td class="tr3">{{total}} Ⱡ</td>
+											</tr>
+										{{/each}}
+									</tbody>
+								</table>
+							</div>
+							<div class="showmore">Ver Mas</div>						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>

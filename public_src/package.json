@@ -1,0 +1,38 @@
+{
+  "name": "Pool_Template-LISK",
+  "version": "1.0.0",
+  "description": "Pool template for SAUCO",
+  "license": "MIT",
+  "author": {
+    "name": "Stanislav Vyshynskiy",
+    "email": "shinekami@madys.net",
+    "url": "https://lisk-ua.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sauco-Apps/dpospool.git"
+  },
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-bower-files": "^0.2.7",
+    "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.7",
+    "gulp-concat": "^2.6.1",
+    "gulp-file-include": "^0.13.7",
+    "gulp-filter": "^5.0.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.1.0",
+    "gulp-sourcemaps": "^2.0.0-alpha",
+    "gulp-uglify": "^1.5.1",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "imagemin-pngquant": "^4.2.2",
+    "rimraf": "^2.4.3",
+    "run-sequence": "^1.2.2"
+  }
+}
