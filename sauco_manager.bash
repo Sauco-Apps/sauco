@@ -52,9 +52,9 @@ CMDS1=("forever" "psql" "createdb" "createuser" "dropdb" "dropuser")
 check_cmds CMDS[@]
 
 set_network() {
-  if [ "$(grep "942b858319e5169e76b1410446fa389fd2d2bc2da264b038726efb3bdab3d481" $SHIFT_CONFIG )" ];then
+  if [ "$(grep "71ecdd4f95e069bb67f89ca93c86c1b11192c245d76e22d42e04807c4db4b499" $SHIFT_CONFIG )" ];then
     NETWORK="main"
-  elif [ "$(grep "1bce8da0d6e616482de1ebf920ef3875e166332affdd70f9a8a689babce54420" $SHIFT_CONFIG )" ];then
+  elif [ "$(grep "9ffb50384d1c8cdaf06859d2bcf96a281575b04b6fea87b0706fc3ba7b772b95" $SHIFT_CONFIG )" ];then
     NETWORK="test"
   else
     NETWORK="unknown"
