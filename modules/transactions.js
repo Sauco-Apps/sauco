@@ -569,7 +569,7 @@ Transactions.prototype.fillPool = function (cb) {
  * @param {function} cb - Callback function.
  */
 Transactions.prototype.sandboxApi = function (call, args, cb) {
-	sandboxHelper.callMethod(shared, call, args, cb);
+	sandboxHelper.callMethod(this.shared, call, args, cb);
 };
 
 /**
@@ -725,6 +725,11 @@ Transactions.prototype.shared = {
 			}
 
 			var query = {address: req.body.recipientId};
+
+			// Needs fix: Reject transactions with requesterPublicKey property for now
+			if (req.body.requesterPublicKey) {
+				return setImmediate(cb, 'Multisig request is not allowed');
+			}
 
 			library.balancesSequence.add(function (cb) {
 				modules.accounts.getAccount(query, function (err, recipient) {
