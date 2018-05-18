@@ -1,6 +1,6 @@
 {
     "version": 0,
-    "totalAmount": 5000000000000000,
+    "totalAmount": 1000000000000000,
     "totalFee": 0,
     "payloadHash": "9ffb50384d1c8cdaf06859d2bcf96a281575b04b6fea87b0706fc3ba7b772b95",
     "timestamp": 0,
@@ -11,7 +11,7 @@
     "transactions": [
         {
             "type": 0,
-            "amount": 5000000000000000,
+            "amount": 1000000000000000,
             "fee": 0,
             "timestamp": 0,
             "recipientId": "9403994383099641734S",
@@ -1641,9 +1641,9 @@
             "amount": 0,
             "fee": 0,
             "timestamp": 0,
-            "recipientId": "6993281734491429474S",
-            "senderId": "6993281734491429474S",
-            "senderPublicKey": "1bce8da0d6e616482de1ebf920ef3875e166332affdd70f9a8a689babce54420",
+            "recipientId": "9403994383099641734S",
+            "senderId": "9403994383099641734S",
+            "senderPublicKey": "e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802",
             "asset": {
                 "votes": [
                     "+e8388167961f37d2f28f9c5969342804f81b22d5e962403543cc3cbecf78ef73",

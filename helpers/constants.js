@@ -116,16 +116,12 @@ module.exports = {
 	],	
 	rewards: [
 		{ height: 1,        reward: 0,         salary: 0 },
-		{ height: 10,       reward: 100000000, salary: 0 },
-		{ height: 11,       reward: 30000000,  salary: 0 },
-		{ height: 12,       reward: 20000000,  salary: 0 },
-		{ height: 13,       reward: 100000000, salary: 0 },
-		{ height: 640000,   reward: 110000000, salary: 0 },
-		{ height: 1617500,  reward: 100000000, salary: 10000000 },
-		{ height: 3164000,  reward: 90000000,  salary: 10000000 },
-		{ height: 4332000,  reward: 80000000,  salary: 9000000 }
+		{ height: 2,        reward: 100000000, salary: 0 },
+		{ height: 2500,     reward: 250000000, salary: 25000000 },
+		{ height: 96001,    reward: 200000000, salary: 20000000 },
+		{ height: 1168001,  reward: 100000000, salary: 10000000 }
 	],
 	signatureLength: 196,
-	totalAmount: 5000000000000000,
+	totalAmount: 1000000000000000,
 	unconfirmedTransactionTimeOut: 10800 // 1080 blocks
 };
