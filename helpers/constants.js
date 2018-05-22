@@ -116,7 +116,8 @@ module.exports = {
 	],	
 	rewards: [
 		{ height: 1,        reward: 0,         salary: 0 },
-		{ height: 2,        reward: 100000000, salary: 0 },
+		{ height: 2,        reward: 100000000, salary: 10000000 },
+		{ height: 3,        reward: 0, salary: 0 },
 		{ height: 2500,     reward: 250000000, salary: 25000000 },
 		{ height: 96001,    reward: 200000000, salary: 20000000 },
 		{ height: 1168001,  reward: 100000000, salary: 10000000 }
