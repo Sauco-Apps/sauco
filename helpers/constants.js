@@ -110,7 +110,7 @@ module.exports = {
 	requestLength: 104,
 	teamAccounts: [
 		// Mainnet
-		'6c56a95f9ea891aa35f264a32baa112a228cb534ff94ceecfe82c5b5c70d15d0',
+		'3160fdb9e0049c8ccb47e37421e6df20cc274e0c47edbe0b8004c8cc02585a0a',
 		// Testnet
 		'e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802'
 	],	

@@ -1,4 +1,4 @@
-## SAUCO version 6.7
+## SAUCO version 6.8
 
 ## Installation
 
@@ -48,6 +48,7 @@ Rebuild blockchain fron official snapshot
 ## Authors
 - Luis González (Sauco Team)
 - Francisco Contreras (Sauco Team)
+- Jose David Romero (Sauco Team)
 - Mariusz Serek <mariusz@serek.net>
 - Goldeneye (Shift Team)
 - Ralfs (Shift Team)
