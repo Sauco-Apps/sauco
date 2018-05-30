@@ -47,10 +47,6 @@ DB_PORT="$(grep "dbport" "$POOL_CONFIG" | cut -f 4 -d '"')"
 DB_DATA="$(pwd)/pgsql/data"
 DB_CONFIG="$(pwd)/pgsql/pgsql.conf"
 
-CMDS=("node" "crontab" "curl")
-CMDS1=("forever" "psql" "createdb" "createuser" "dropdb" "dropuser")
-check_cmds CMDS[@]
-
 set_network() {
   if [ "$(grep "fa7869d9006e6dbc64ac96b44f4fea65833f9f2774dd8798bec4f9f2dc094099" $SHIFT_CONFIG )" ];then
     NETWORK="main"
