@@ -1,6 +1,6 @@
 {
     "version": 0,
-    "totalAmount": 5000000000000000,
+    "totalAmount": 1000000000000000,
     "totalFee": 0,
     "payloadHash": "fa7869d9006e6dbc64ac96b44f4fea65833f9f2774dd8798bec4f9f2dc094099",
     "timestamp": 0,
@@ -11,7 +11,7 @@
     "transactions": [
         {
             "type": 0,
-            "amount": 5000000000000000,
+            "amount": 1000000000000000,
             "fee": 0,
             "timestamp": 0,
             "recipientId": "12937327510772765197S",
@@ -1641,9 +1641,15 @@
             "amount": 0,
             "fee": 0,
             "timestamp": 0,
+<<<<<<< HEAD
             "recipientId": "1322932199875446915S",
             "senderId": "1322932199875446915S",
             "senderPublicKey": "fe561132f28c3d6da8690c42fd4be8c5bcdad7b5a74d7f4e13355c7aef1e75ad",
+=======
+            "recipientId": "9403994383099641734S",
+            "senderId": "9403994383099641734S",
+            "senderPublicKey": "e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802",
+>>>>>>> testnet
             "asset": {
                 "votes": [
                     "+8f6befe5802f2e6e2da642ef219cedfb46ea597460ac8dd2129da4ec4f10833d",

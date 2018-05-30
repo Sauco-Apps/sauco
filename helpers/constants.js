@@ -41,16 +41,17 @@
  * @property {number} unconfirmedTransactionTimeOut - 1080 blocks
  */
 module.exports = {
-	currentVersion: '6.7.0',
+	currentVersion: '6.8.0',
 	minVersion: [
-		{ height: 1, ver: '^6.6.2'}
+		{ height: 1, ver: '^6.7.0'},
+		{ height: 2, ver: '^6.8.0'}
 	],
 	activeDelegates: 101,
 	addressLength: 208,
 	blockHeaderLength: 248,
-	blockSlotWindow: 5, // window in which a slot could be accepted	
+	blockSlotWindow: 5, // window in which a slot could be accepted
 	blockTime: 27000,
-	blockReceiptTimeOut: 27*2, // 2 blocks
+	blockReceiptTimeOut: 27 * 2, // 2 blocks
 	confirmationLength: 77,
 	epochTime: new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)),
 	fees: [
@@ -107,15 +108,21 @@ module.exports = {
 	],
 	numberLength: 100000000,
 	requestLength: 104,
+	teamAccounts: [
+		// Mainnet
+		'6c56a95f9ea891aa35f264a32baa112a228cb534ff94ceecfe82c5b5c70d15d0',
+		// Testnet
+		'e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802'
+	],	
 	rewards: [
-		{ height: 1,        reward: 0},
-		{ height: 10,       reward: 100000000},
-		{ height: 11,       reward: 30000000},
-		{ height: 12,       reward: 20000000},
-		{ height: 13,       reward: 0},
-        { height: 16000,    reward: 100000000}
+		{ height: 1,        reward: 0,         salary: 0 },
+		{ height: 2,        reward: 100000000, salary: 10000000 },
+		{ height: 3,        reward: 0, salary: 0 },
+		{ height: 64000,     reward: 250000000, salary: 25000000 },
+		{ height: 288000,    reward: 200000000, salary: 20000000 },
+		{ height: 1168001,  reward: 150000000, salary: 15000000 }
 	],
 	signatureLength: 196,
-	totalAmount: 5000000000000000,
+	totalAmount: 1000000000000000,
 	unconfirmedTransactionTimeOut: 10800 // 1080 blocks
 };

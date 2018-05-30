@@ -127,5 +127,9 @@
     "masterpassword": "VUosDVEoQHAt",
     "autoexec": []
   },
+<<<<<<< HEAD
   "nethash": "fa7869d9006e6dbc64ac96b44f4fea65833f9f2774dd8798bec4f9f2dc094099"
+=======
+  "nethash": "9ffb50384d1c8cdaf06859d2bcf96a281575b04b6fea87b0706fc3ba7b772b95"
+>>>>>>> testnet
 }
