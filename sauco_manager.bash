@@ -447,11 +447,11 @@ install_ipfs() {
   fi
 
   # Check if IPFS is already installed
-  ipfs_exists=$(whereis ipfs | awk {'print $2'})
-    if [[ ! -z $ipfs_exists ]]; then
-      echo -e "IPFS is already installed. Remove it first with ./sauco_manager.bash remove_ipfs"
-      exit 1;
-    fi
+  #ipfs_exists=$(whereis ipfs | awk {'print $2'})
+  #  if [[ ! -z $ipfs_exists ]]; then
+  #    echo -e "IPFS is already installed. Remove it first with ./sauco_manager.bash remove_ipfs"
+  #    exit 1;
+  #  fi
 
   # Move the binary to /usr/local/bin/
   if [ ! -f $root_path/bin/ipfs ]; then
@@ -679,6 +679,7 @@ case $1 in
       install_node_npm
       install_sauco
       install_webui
+      install_ipfs
       echo ""
       echo ""
       echo "SAUCO successfully installed"
@@ -742,11 +743,13 @@ case $1 in
       show_blockHeight
       ;;
     "rebuild")
+      stop_ipfs
       stop_sauco
       sleep 2
       start_postgres
       sleep 2
       rebuild_sauco
+      start_ipfs
       start_sauco
       show_blockHeight
       ;;
@@ -760,6 +763,7 @@ case $1 in
     ;;
     "start")
       parse_option $@
+      start_ipfs
       start_sauco
       show_blockHeight
     ;;
