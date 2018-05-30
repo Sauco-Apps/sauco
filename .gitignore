@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 node_modules
 logs
 pids
 public
-=======
-/logs
-/node_modules
-/public
-/pids
->>>>>>> testnet
