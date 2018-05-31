@@ -477,7 +477,7 @@ install_ipfs() {
   else
       echo -e "Pushing IPFS config..." && sleep 2;
       MYIP=$(dig +short myip.opendns.com @resolver1.opendns.com)
-      ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"https://$MYIP:$SPORT\",\"http://$MYIP:$PORT\",\"https://127.0.0.1:$SPORT\",\"http://127.0.0.1:$PORT\"]"
+      ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"https://$MYIP:5001\",\"http://$MYIP:5001\",\"https://127.0.0.1:5001\",\"http://127.0.0.1:5001\",\"https://$MYIP:8080\",\"http://$MYIP:8080\",\"https://127.0.0.1:8080\",\"http://127.0.0.1:8080\",\"https://$MYIP:4001\",\"http://$MYIP:4001\",\"https://127.0.0.1:4001\",\"http://127.0.0.1:4001\"]"
       ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
       ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
       ipfs config --json Addresses.API '"/ip4/0.0.0.0/tcp/5001"'
