@@ -237,7 +237,7 @@ install_node_npm() {
     echo -n "Installing nodejs and npm... "
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &>> $logfile
     sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
-    sudo apt-get install npm &>> $logfile || { echo "Could not install npm. Exiting." && exit 1; }
+    #sudo apt-get install npm &>> $logfile || { echo "Could not install npm. Exiting." && exit 1; }
     echo -e "done.\n" && echo -n "Installing grunt-cli... "
     sudo npm install grunt-cli -g &>> $logfile || { echo "Could not install grunt-cli. Exiting." && exit 1; }
     echo -e "done.\n" && echo -n "Installing bower... "
@@ -252,8 +252,7 @@ install_node_npm() {
 install_sauco() {
 
     echo -n "Installing Sauco core... "
-    #npm install --production --unsafe-perm &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
-    npm install &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
+    npm install --production --unsafe-perm &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
     echo -e "done.\n"
 
     return 0;
