@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.2.0"
+version="1.2.1"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -158,7 +158,7 @@ download_blockchain() {
     if [ "$downloadornot" == "y" ] || [ -z "$downloadornot" ]; then
         rm -f $DB_SNAPSHOT
         if [ -z "$BLOCKCHAIN_URL" ]; then
-            BLOCKCHAIN_URL="https://downloads.sauconrg.org/snapshot/$NETWORK"
+            BLOCKCHAIN_URL="https://downloads.sauco.io/snapshot/$NETWORK"
         fi
         echo "√ Downloading $DB_SNAPSHOT from $BLOCKCHAIN_URL"
         curl --progress-bar -o $DB_SNAPSHOT "$BLOCKCHAIN_URL/$DB_SNAPSHOT"
@@ -483,9 +483,9 @@ install_ipfs() {
       ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
       ipfs config --json Addresses.API '"/ip4/0.0.0.0/tcp/5001"'
       ipfs config --json Addresses.Gateway '"/ip4/0.0.0.0/tcp/8080"'
-      BOOTSTRAP=$(ipfs config Bootstrap)
-      BOOTSTRAP=$(echo $BOOTSTRAP | jq ' .+ ["/ip4/213.32.16.10/tcp/4001/ipfs/QmcWjSF6prpJwBZsfPSfzGEL61agU1vcMNCX8K6qaH5PAq"]')
-      ipfs config --json Bootstrap "$BOOTSTRAP"
+      #BOOTSTRAP=$(ipfs config Bootstrap)
+      #BOOTSTRAP=$(echo $BOOTSTRAP | jq ' .+ ["/ip4/213.32.16.10/tcp/4001/ipfs/QmcWjSF6prpJwBZsfPSfzGEL61agU1vcMNCX8K6qaH5PAq"]')
+      #ipfs config --json Bootstrap "$BOOTSTRAP"
 
       if [[ $(ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin) = *$MYIP* ]]; then
         echo -e "\nIPFS succesfully installed!";
