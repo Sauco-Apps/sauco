@@ -50,7 +50,12 @@
   },
   "peers": {
     "enabled": true,
-    "list": [],
+    "list": [
+      {
+        "ip": "35.237.202.207",
+        "port": 4000
+      }
+    ],
     "access": {
       "blackList": []
     },

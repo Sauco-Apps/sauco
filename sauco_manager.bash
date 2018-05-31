@@ -770,6 +770,7 @@ case $1 in
       start_snapshot
     ;;
     "stop")
+      stop_ipfs
       stop_sauco
     ;;
 
