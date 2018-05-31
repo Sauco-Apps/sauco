@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.2.1"
+version="1.2.2"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -252,7 +252,8 @@ install_node_npm() {
 install_sauco() {
 
     echo -n "Installing Sauco core... "
-    npm install --production --unsafe-perm &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
+    #npm install --production --unsafe-perm &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
+    npm install &>> $logfile || { echo "Could not install SAUCO, please check the log directory. Exiting." && exit 1; }
     echo -e "done.\n"
 
     return 0;
