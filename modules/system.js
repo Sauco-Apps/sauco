@@ -103,15 +103,6 @@ System.prototype.getNethash = function () {
 };
 
 /**
- * Gets `teamAccount` based on nethash
- * @return {publicKey}
- */
-System.prototype.getTeamAccount = function () {
-	var idx = constants.nethashes.indexOf(__private.nethash);
-	return constants.teamAccounts[idx];
-};
-
-/**
  * Gets private variable `nonce`
  * @return {nonce}
  */

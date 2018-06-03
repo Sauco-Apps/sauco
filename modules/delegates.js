@@ -161,24 +161,29 @@ __private.forge = function (cb) {
 			return setImmediate(cb);
 		}
 
-		async.series({
-			getPeers: function (seriesCb) {
-				return modules.transport.getPeers({limit: constants.maxPeers}, seriesCb);
-			},
-			checkBroadhash: function (seriesCb) {
-				if (modules.transport.poorConsensus()) {
-					return setImmediate(seriesCb, ['Inadequate broadhash consensus', modules.transport.consensus(), '%'].join(' '));
-				} else {
-					return setImmediate(seriesCb);
+		library.sequence.add(function (cb) {
+			async.series({
+				getPeers: function (seriesCb) {
+					return modules.transport.getPeers({limit: constants.maxPeers}, seriesCb);
+				},
+				checkBroadhash: function (seriesCb) {
+					if (modules.transport.poorConsensus()) {
+						return setImmediate(seriesCb, ['Inadequate broadhash consensus', modules.transport.consensus(), '%'].join(' '));
+					} else {
+						return setImmediate(seriesCb);
+					}
 				}
-			},
-			generateBlock: function (seriesCb) {
-				return modules.blocks.process.generateBlock(currentBlockData.keypair, currentBlockData.time, seriesCb);
-			}
+			}, function (err) {
+				if (err) {
+					library.logger.warn(err);
+					return setImmediate(cb, err);
+				} else {
+					return modules.blocks.process.generateBlock(currentBlockData.keypair, currentBlockData.time, cb);
+				}
+			});
 		}, function (err) {
 			if (err) {
 				library.logger.error('Failed to generate block within delegate slot', err);
-				return setImmediate(cb, err);
 			} else {
 				var forgedBlock = modules.blocks.lastBlock.get();
 				modules.blocks.lastReceipt.update();
@@ -190,9 +195,9 @@ __private.forge = function (cb) {
 					'slot:', slots.getSlotNumber(currentBlockData.time),
 					'reward:' + forgedBlock.reward
 				].join(' '));
-
-				return setImmediate(cb);
 			}
+
+			return setImmediate(cb);
 		});
 	});
 };
@@ -545,18 +550,16 @@ Delegates.prototype.onBlockchainReady = function () {
 	__private.loadDelegates(function (err) {
 
 		function nextForge (cb) {
-			library.sequence.add(function (cb) {
-				if (err) {
-					library.logger.error('Failed to load delegates', err);
-				}
+			if (err) {
+				library.logger.error('Failed to load delegates', err);
+			}
 
-				async.series([
-					__private.forge,
-					modules.transactions.fillPool
-				], function () {
-					return setImmediate(cb);
-				});
-			}, cb);
+			async.series([
+				__private.forge,
+				modules.transactions.fillPool
+			], function () {
+				return setImmediate(cb);
+			});
 		}
 
 		jobsQueue.register('delegatesNextForge', nextForge, 1000);

@@ -115,12 +115,12 @@ module.exports = {
 		'e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802'
 	],	
 	rewards: [
-		{ height: 1,        reward: 0,         salary: 0 },
-		{ height: 2,        reward: 100000000, salary: 10000000 },
-		{ height: 3,        reward: 0, salary: 0 },
-		{ height: 64000,     reward: 250000000, salary: 25000000 },
-		{ height: 288000,    reward: 200000000, salary: 20000000 },
-		{ height: 1168001,  reward: 150000000, salary: 15000000 }
+		{ height: 1,        reward: 0 },
+		{ height: 2,        reward: 100000000 },
+		{ height: 3,        reward: 0 },
+		{ height: 64000,     reward: 250000000 },
+		{ height: 288000,    reward: 200000000 },
+		{ height: 1168001,  reward: 150000000 }
 	],
 	signatureLength: 196,
 	totalAmount: 1000000000000000,
