@@ -741,13 +741,11 @@ case $1 in
       show_blockHeight
       ;;
     "rebuild")
-      stop_ipfs
       stop_sauco
       sleep 2
       start_postgres
       sleep 2
       rebuild_sauco
-      start_ipfs
       start_sauco
       show_blockHeight
       ;;

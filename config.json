@@ -11,7 +11,7 @@
   "cacheEnabled": true,
   "host": "127.0.0.1",
   "protocol": "http",
-  "network": "testnet",
+  "network": "mainnet",
   "db": {
     "host": "localhost",
     "port": 5432,
