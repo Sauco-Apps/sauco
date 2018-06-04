@@ -48,7 +48,7 @@ DB_DATA="$(pwd)/pgsql/data"
 DB_CONFIG="$(pwd)/pgsql/pgsql.conf"
 
 set_network() {
-  if [ "$(grep "5e46ad3c1e48ab33832312370507a506634f77e61db452d9b70886e113412f38" $SHIFT_CONFIG )" ];then
+  if [ "$(grep "fe561132f28c3d6da8690c42fd4be8c5bcdad7b5a74d7f4e13355c7aef1e75ad" $SHIFT_CONFIG )" ];then
     NETWORK="main"
   elif [ "$(grep "1bce8da0d6e616482de1ebf920ef3875e166332affdd70f9a8a689babce54420" $SHIFT_CONFIG )" ];then
     NETWORK="test"
