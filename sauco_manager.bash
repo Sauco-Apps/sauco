@@ -677,7 +677,6 @@ case $1 in
       install_node_npm
       install_sauco
       install_webui
-      install_ipfs
       echo ""
       echo ""
       echo "SAUCO successfully installed"
@@ -759,7 +758,6 @@ case $1 in
     ;;
     "start")
       parse_option $@
-      start_ipfs
       start_sauco
       show_blockHeight
     ;;
@@ -768,7 +766,6 @@ case $1 in
       start_snapshot
     ;;
     "stop")
-      stop_ipfs
       stop_sauco
     ;;
 
