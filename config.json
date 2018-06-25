@@ -54,6 +54,10 @@
       {
         "ip": "35.237.46.178",
         "port": 4000
+      },
+      {
+        "ip": "54.148.29.200",
+        "port": 4000
       }
     ],
     "access": {
@@ -126,7 +130,7 @@
   },
   "dapp": {
     "masterrequired": true,
-    "masterpassword": "VUosDVEoQHAt",
+    "masterpassword": "",
     "autoexec": []
   },
   "nethash": "fe561132f28c3d6da8690c42fd4be8c5bcdad7b5a74d7f4e13355c7aef1e75ad"
