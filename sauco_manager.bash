@@ -2,14 +2,13 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.2.2"
+version="1.3.0"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
 
 mkdir -p $root_path/logs
 logfile=$root_path/logs/sauco_manager.log
-ipfs_log=$root_path/logs/ipfs.log
 
 SCRIPT_NAME="saucoPool"
 
@@ -61,10 +60,10 @@ SHIFT_CONFIG="config.json"
 DB_NAME="$(grep "database" $SHIFT_CONFIG | cut -f 4 -d '"' | head -1)"
 DB_UNAME="$(grep "user" $SHIFT_CONFIG | cut -f 4 -d '"' | head -1)"
 DB_PASSWD="$(grep "password" $SHIFT_CONFIG | cut -f 4 -d '"' | head -1)"
-DB_SNAPSHOT="blockchain.db.gz"
+DB_SNAPSHOT="blockchain.gz"
 NETWORK=""
 set_network
-BLOCKCHAIN_URL="https://downloads.sauco.io/snapshot/$NETWORK"
+BLOCKCHAIN_URL="https://sauco.io/snapshot/$NETWORK"
 GIT_BRANCH="$(git branch | sed -n '/\* /s///p')"
 
 install_prereq() {
@@ -290,6 +289,13 @@ install_webui() {
 
 }
 
+#Crear Tracker para Sauco Platform (TESTING)
+install_tracker() {
+  echo "Instalando Tracker Sauco Platform..."
+  npm install -g zeronet-tracker  &>> $logfile || { echo -e "\n\n No se pudo instalar el tracker." && exit 1; }
+  
+}
+
 update_manager() {
 
     echo -n "Updating Sauco Manager ... "
@@ -369,7 +375,7 @@ start_sauco() {
     echo -n "Starting Sauco... "
     forever_exists=$(whereis forever | awk {'print $2'})
     if [[ ! -z $forever_exists ]]; then
-        $forever_exists start -o $root_path/logs/sauco_console.log -e $root_path/logs/sauco_err.log app.js -c "$SHIFT_CONFIG" &>> $logfile || \
+        $forever_exists start -e $root_path/logs/sauco_err.log app.js -c "$SHIFT_CONFIG" &>> $logfile || \
         { echo -e "\nCould not start Sauco." && exit 1; }
     fi
 
@@ -387,7 +393,7 @@ start_sauco() {
     echo -n "Starting Sauco (snapshot mode) ... "
     forever_exists=$(whereis forever | awk {'print $2'})
     if [[ ! -z $forever_exists ]]; then
-        $forever_exists start -o $root_path/logs/snapshot_console.log -e $root_path/logs/snapshot_err.log app.js -c "$SHIFT_CONFIG" -s highest &>> $logfile || \
+        $forever_exists start -e $root_path/logs/snapshot_err.log app.js -c "$SHIFT_CONFIG" -s highest &>> $logfile || \
         { echo -e "\nCould not start Sauco." && exit 1; }
     fi
 
@@ -429,136 +435,8 @@ parse_option() {
 
 rebuild_sauco() {
   create_database
-}
-
-install_ipfs() {
-  sudo apt-get update  &> /dev/null;
-  if [ ! -x "$(command -v jq)" ]; then
-      echo -n "jq is not installed. Installing jq ... "
-      sudo apt-get install -y -qq jq  &> /dev/null || { echo "Could not install jq. Exiting." && exit 1; };
-      echo -e "done.\n"
-  fi
-  if [ ! -x "$(command -v dig)" ]; then
-      echo -n "dig is not installed. Installing dnsutils ... "
-      sudo apt-get install -y -qq dnsutils  &> /dev/null || { echo "Could not install dig. Exiting." && exit 1; };
-      echo -e "done.\n"
-  fi
-
-  # Check if IPFS is already installed
-  #ipfs_exists=$(whereis ipfs | awk {'print $2'})
-  #  if [[ ! -z $ipfs_exists ]]; then
-  #    echo -e "IPFS is already installed. Remove it first with ./sauco_manager.bash remove_ipfs"
-  #    exit 1;
-  #  fi
-
-  # Move the binary to /usr/local/bin/
-  if [ ! -f $root_path/bin/ipfs ]; then
-      echo -e "\nIPFS binary not found!" && exit 1;
-  else
-      sudo cp $root_path/bin/ipfs /usr/local/bin/ipfs
-  fi
-
-  # IPFS initialise
-  if [ ! -f /usr/local/bin/ipfs ]; then
-      echo -e "\n/usr/local/bin/ipfs does not exist!" && exit 1;
-  else
-      sudo chmod 755 /usr/local/bin/ipfs
-      ipfs init
-  fi
-
-  PORT="$(jq .port $SHIFT_CONFIG)"
-  SPORT="$(jq .ssl.options.port $SHIFT_CONFIG)"
-
-  # Check if ipfs config exists
-  if [ ! -f ~/.ipfs/config ]; then
-      echo -e "\nIPFS installation failed.." && exit 1;
-  else
-      echo -e "Pushing IPFS config..." && sleep 2;
-      MYIP=$(dig +short myip.opendns.com @resolver1.opendns.com)
-      ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"https://$MYIP:5001\",\"http://$MYIP:5001\",\"https://127.0.0.1:5001\",\"http://127.0.0.1:5001\",\"https://$MYIP:8080\",\"http://$MYIP:8080\",\"https://127.0.0.1:8080\",\"http://127.0.0.1:8080\",\"https://$MYIP:4001\",\"http://$MYIP:4001\",\"https://127.0.0.1:4001\",\"http://127.0.0.1:4001\"]"
-      ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
-      ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
-      ipfs config --json Addresses.API '"/ip4/0.0.0.0/tcp/5001"'
-      ipfs config --json Addresses.Gateway '"/ip4/0.0.0.0/tcp/8080"'
-      #BOOTSTRAP=$(ipfs config Bootstrap)
-      #BOOTSTRAP=$(echo $BOOTSTRAP | jq ' .+ ["/ip4/213.32.16.10/tcp/4001/ipfs/QmcWjSF6prpJwBZsfPSfzGEL61agU1vcMNCX8K6qaH5PAq"]')
-      #ipfs config --json Bootstrap "$BOOTSTRAP"
-
-      if [[ $(ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin) = *$MYIP* ]]; then
-        echo -e "\nIPFS succesfully installed!";
-      else
-        echo -e "\nError pushing IPFS config!!" && exit 1;
-      fi
-  fi
-}
-
-remove_ipfs() {
-  echo -e "Removing IPFS from your system.."
-
-  if [[ -f /usr/local/bin/ipfs ]]; then
-    if sudo rm /usr/local/bin/ipfs; then
-      echo -e "Removed /usr/local/bin/ipfs"
-    else
-      echo -e "Unable to remove /usr/local/bin/ipfs"
-    fi
-  fi
-
-  if [ -d "$HOME/.ipfs" ]; then
-    if sudo rm -rf $HOME/.ipfs; then
-      echo -e "Removed $HOME/.ipfs"
-    else
-      echo -e "Unable to remove $HOME/.ipfs"
-    fi
-  fi
-
-  echo -e "Done."
-}
-
-start_ipfs() {
-  echo -e "Starting IPFS daemon.."
-
-  if ! sudo pgrep -x "ipfs" > /dev/null; then
-    ipfs daemon > $ipfs_log 2>&1 &
-    sleep 2
-    if ! sudo pgrep -x "ipfs" > /dev/null; then
-      echo -e "IPFS not started. Check the log file: $ipfs_log"
-      exit 1;
-    else
-      echo -e "IPFS started!"
-    fi
-  else
-    echo -e "IPFS already running.."
-  fi
-}
-
-stop_ipfs() {
-  echo -e "Stopping IPFS daemon.."
-
-  if ! sudo pgrep -x "ipfs" > /dev/null; then
-    echo -e "IPFS not running.."
-    exit 1;
-  else
-    pgrep ipfs | xargs kill
-    sleep 4
-
-    if ! sudo pgrep -x "ipfs" > /dev/null; then
-      echo -e "IPFS stopped!"
-    else
-      echo -e "IPFS still running.."
-      exit 1;
-    fi
-  fi
-}
-
-check_ipfs() {
-  echo -e "Checking if IPFS is running.."
-
-  if ! sudo pgrep -x "ipfs" > /dev/null; then
-    echo -e "IPFS not running.."
-    exit 1;
-  else
-    echo -e "IPFS is runnning!"
-  fi
+  download_blockchain
+  restore_blockchain
 }
 
 start_log() {
@@ -583,6 +461,7 @@ install_pool(){
 }
 
 autostart_pool() {
+
   local cmd="crontab"
 
   command -v "$cmd" &> /dev/null
@@ -592,11 +471,11 @@ autostart_pool() {
     return 1
   fi
 
-  crontab=$($cmd -l 2> /dev/null | sed '/pool\.sh start/d' 2> /dev/null)
+  crontab=$($cmd -l 2> /dev/null | sed '/sauco_manager\.sh start_pool/d' 2> /dev/null)
 
   crontab=$(cat <<-EOF
 	$crontab
-	@reboot $(command -v "bash") $(pwd)/pool.sh start > $LOG_CRON_FILE 2>&1
+	@reboot $(command -v "bash") $(pwd)/sauco_manager.sh start_pool > $LOG_CRON_FILE 2>&1
 	EOF
   )
 
@@ -609,7 +488,9 @@ autostart_pool() {
     echo "√ Crontab updated successfully."
     return 0
   fi
+  
 }
+
 check_pool() {
   if [ -f "$PID_APP_FILE" ]; then
     PID="$(cat "$PID_APP_FILE")"
@@ -701,22 +582,8 @@ case $1 in
       update_wallet
       sleep 2
       start_sauco
+      sleep 2
       show_blockHeight
-    ;;
-    "install_ipfs")
-      install_ipfs
-    ;;
-    "remove_ipfs")
-      remove_ipfs
-    ;;
-    "start_ipfs")
-      start_ipfs
-    ;;
-    "stop_ipfs")
-      stop_ipfs
-    ;;
-    "check_ipfs")
-      check_ipfs
     ;;
     "install_pool")
       install_pool
@@ -770,7 +637,7 @@ case $1 in
     ;;
 
 *)
-    echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet, install_ipfs, remove_ipfs, start_ipfs, stop_ipfs, check_ipfs'
+    echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet, install_pool, start_pool, stop_pool'
     echo 'Usage: ./sauco_installer.bash install'
     exit 1
 ;;
