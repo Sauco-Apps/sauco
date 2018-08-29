@@ -1,4 +1,4 @@
-## SAUCO version 6.8
+## SAUCO version 7.0
 
 ## Installation
 
