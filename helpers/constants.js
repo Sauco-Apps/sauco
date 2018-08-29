@@ -119,8 +119,8 @@ module.exports = {
 		{ height: 1,        reward: 0 },
 		{ height: 2,        reward: 100000000 },
 		{ height: 3,        reward: 0 },
-		{ height: 64000,    reward: 250000000 },
-		{ height: 288000,   reward: 200000000 },
+		{ height: 64000,     reward: 250000000 },
+		{ height: 288000,    reward: 200000000 },
 		{ height: 1168001,  reward: 150000000 }
 	],
 	signatureLength: 196,

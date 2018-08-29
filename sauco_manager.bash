@@ -356,7 +356,6 @@ check_tracker(){
  fi
 }
 
-
 update_manager() {
 
     echo -n "Updating Sauco Manager ... "
@@ -711,6 +710,7 @@ case $1 in
 
 *)
     echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet, install_pool, start_pool, stop_pool, install_tracker, start_tracker, stop_tracker, check_tracker'
+
     echo 'Usage: ./sauco_installer.bash install'
     exit 1
 ;;

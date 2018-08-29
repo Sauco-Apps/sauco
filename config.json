@@ -11,7 +11,7 @@
   "cacheEnabled": true,
   "host": "127.0.0.1",
   "protocol": "http",
-  "network": "testnet",
+  "network": "mainnet",
   "db": {
     "host": "localhost",
     "port": 5432,
@@ -50,7 +50,20 @@
   },
   "peers": {
     "enabled": true,
-    "list": [],
+    "list": [
+      {
+        "ip": "35.237.46.178",
+        "port": 4000
+      },
+      {
+        "ip": "54.148.29.200",
+        "port": 4000
+      },
+      {
+        "ip": "200.0.116.18",
+        "port": 4000
+      }
+    ],
     "access": {
       "blackList": []
     },
@@ -77,7 +90,6 @@
   "forging": {
     "force": true,
     "secret": [
-      
     ],
     "access": {
       "whiteList": [
@@ -122,8 +134,8 @@
   },
   "dapp": {
     "masterrequired": true,
-    "masterpassword": "VUosDVEoQHAt",
+    "masterpassword": "",
     "autoexec": []
   },
-  "nethash": "9ffb50384d1c8cdaf06859d2bcf96a281575b04b6fea87b0706fc3ba7b772b95"
+  "nethash": "fe561132f28c3d6da8690c42fd4be8c5bcdad7b5a74d7f4e13355c7aef1e75ad"
 }
