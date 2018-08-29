@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.3.0"
+version="1.3.1"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -38,6 +38,7 @@ LOG_CRON_FILE="$LOGS_DIR/cron.log"
 
 PID_APP_FILE="$PIDS_DIR/dpospool.pid"
 PID_DB_FILE="$PIDS_DIR/pgsql.pid"
+PID_TRACKER="$PIDS_DIR/tracker.pid"
 
 DB_NAME="$(grep "dbname" "$POOL_CONFIG" | cut -f 4 -d '"')"
 DB_USER="$(grep "dbuser" "$POOL_CONFIG" | cut -f 4 -d '"')"
@@ -291,10 +292,70 @@ install_webui() {
 
 #Crear Tracker para Sauco Platform (TESTING)
 install_tracker() {
-  echo "Instalando Tracker Sauco Platform..."
-  npm install -g zeronet-tracker  &>> $logfile || { echo -e "\n\n No se pudo instalar el tracker." && exit 1; }
-  
+ echo "Instalando Tracker Sauco Platform..."
+ git clone https://github.com/Sauco-Apps/sauco-tracker.git &>> $logfile || { echo -e "\n\n No se pudo instalar el tracker." && exit 1; }
+ cd sauco-tracker
+ npm install
+ cd ..
+
+ start_tracker
 }
+
+start_tracker(){
+ if check_tracker == 1 &> /dev/null; then
+   check_tracker
+   exit 1
+ else
+   forever start -u Sauco_Tracker --pidFile $PID_TRACKER -m 1 ./sauco_tracker/bin/cmd.js -p 7000 &> /dev/null
+   if [ $? == 0 ]; then
+     echo "√ Sauco_Tracker started successfully."
+     sleep 3
+     check_tracker
+   else
+     echo "X Failed to start Sauco Tracker."
+   fi
+ fi
+}
+
+stop_tracker(){
+ if check_tracker != 1 &> /dev/null; then
+   stopTracker=0
+   while [[ $stopPool < 5 ]] &> /dev/null; do
+     forever stop -t $PID --killSignal=SIGTERM &> /dev/null
+     if [ $? !=  0 ]; then
+       echo "X Failed to stop Sauco Tracker."
+     else
+       echo "√ Sauco Tracker stopped successfully."
+       break
+     fi
+     sleep .5
+     stopPool=$[$stopTracker+1]
+   done
+ else
+   echo "√ Sauco Tracker is not running."
+ fi
+}
+
+check_tracker(){
+ if [ -f "$PID_TRACKER" ]; then
+   PID="$(cat "$PID_TRACKER")"
+ fi
+ if [ ! -z "$PID" ]; then
+   ps -p "$PID" > /dev/null 2>&1
+   STATUS=$?
+ else
+   STATUS=1
+ fi
+
+ if [ -f $PID_TRACKER ] && [ ! -z "$PID" ] && [ $STATUS == 0 ]; then
+   echo "√ Sauco Tracker is running as PID: $PID"
+   return 0
+ else
+   echo "X Sauco Tracker is not running."
+   return 1
+ fi
+}
+
 
 update_manager() {
 
@@ -597,6 +658,18 @@ case $1 in
     "check_pool")
       check_pool
     ;;
+    "install_tracker")
+      install_tracker
+    ;;
+    "start_tracker")
+      start_tracker
+    ;;
+    "stop_tracker")
+      stop_tracker
+    ;;
+    "check_tracker")
+      check_tracker
+    ;;
     "logs")
       tail_logs
     ;;
@@ -637,7 +710,7 @@ case $1 in
     ;;
 
 *)
-    echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet, install_pool, start_pool, stop_pool'
+    echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet, install_pool, start_pool, stop_pool, install_tracker, start_tracker, stop_tracker, check_tracker'
     echo 'Usage: ./sauco_installer.bash install'
     exit 1
 ;;

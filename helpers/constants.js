@@ -41,10 +41,11 @@
  * @property {number} unconfirmedTransactionTimeOut - 1080 blocks
  */
 module.exports = {
-	currentVersion: '6.8.0',
+	currentVersion: '7.0.0',
 	minVersion: [
 		{ height: 1, ver: '^6.7.0'},
-		{ height: 2, ver: '^6.8.0'}
+		{ height: 2, ver: '^6.8.0'},
+		{ height: 280000, ver: '^7.0.0'}
 	],
 	activeDelegates: 101,
 	addressLength: 208,
@@ -83,7 +84,7 @@ module.exports = {
 				send: 100000,		// 0.001
 				vote: 100000000,	// 1
 				secondsignature: 10000000,	// 0.1
-				delegate: 3000000000,	// 60
+				delegate: 3000000000,	// 30
 				multisignature: 50000000, // 0.5
 				dapp: 2000000000	//25
 			}
@@ -118,8 +119,8 @@ module.exports = {
 		{ height: 1,        reward: 0 },
 		{ height: 2,        reward: 100000000 },
 		{ height: 3,        reward: 0 },
-		{ height: 64000,     reward: 250000000 },
-		{ height: 288000,    reward: 200000000 },
+		{ height: 64000,    reward: 250000000 },
+		{ height: 288000,   reward: 200000000 },
 		{ height: 1168001,  reward: 150000000 }
 	],
 	signatureLength: 196,
