@@ -25,7 +25,7 @@
 
 var async = require('async');
 var checkIpInList = require('./helpers/checkIpInList.js');
-var extend = require('extend'); 
+var extend = require('extend');
 var fs = require('fs');
 
 var genesisblock = require('./genesisBlock.json');
@@ -572,12 +572,12 @@ d.run(function () {
 		 */
 		listen: ['ready', function (scope, cb) {
 			scope.network.server.listen(scope.config.port, scope.config.address, function (err) {
-				scope.logger.info('Sauco started: ' + scope.config.address + ':' + scope.config.port);
+				scope.logger.info('Shift started: ' + scope.config.address + ':' + scope.config.port);
 
 				if (!err) {
 					if (scope.config.ssl.enabled) {
 						scope.network.https.listen(scope.config.ssl.options.port, scope.config.ssl.options.address, function (err) {
-							scope.logger.info('Sauco https started: ' + scope.config.ssl.options.address + ':' + scope.config.ssl.options.port);
+							scope.logger.info('Shift https started: ' + scope.config.ssl.options.address + ':' + scope.config.ssl.options.port);
 
 							cb(err, scope.network);
 						});

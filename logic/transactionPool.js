@@ -24,7 +24,7 @@ var modules, library, self, __private = {};
  * @param {Object} logger
  */
 // Constructor
-function TransactionPool (broadcastInterval, releaseLimit, transaction, bus, logger, balancesSequence) {
+function TransactionPool (broadcastInterval, releaseLimit, transaction, bus, logger) {
 	library = {
 		logger: logger,
 		bus: bus,
@@ -37,7 +37,6 @@ function TransactionPool (broadcastInterval, releaseLimit, transaction, bus, log
 				releaseLimit: releaseLimit,
 			},
 		},
-		balancesSequence: balancesSequence
 	};
 	self = this;
 
@@ -413,35 +412,31 @@ TransactionPool.prototype.reindexQueues = function () {
 TransactionPool.prototype.processBundled = function (cb) {
 	var bundled = self.getBundledTransactionList(true, self.bundleLimit);
 
-	// Execute in sequence via balancesSequence
-	library.balancesSequence.add(function (cb) {
-		async.eachSeries(bundled, function (transaction, eachSeriesCb) {
-			if (!transaction) {
-				return setImmediate(eachSeriesCb);
-			}
+	async.eachSeries(bundled, function (transaction, eachSeriesCb) {
+		if (!transaction) {
+			return setImmediate(eachSeriesCb);
+		}
 
-			__private.processVerifyTransaction(transaction, true, function (err, sender) {
-				// Remove bundled transaction after asynchronous processVerifyTransaction to avoid race conditions
-				self.removeBundledTransaction(transaction.id);
-				// Delete bundled flag from transaction so it is qualified as "queued" in queueTransaction
-				delete transaction.bundled;
-				if (err) {
-					library.logger.debug('Failed to process / verify bundled transaction: ' + transaction.id, err);
-					self.removeUnconfirmedTransaction(transaction);
+		self.removeBundledTransaction(transaction.id);
+		delete transaction.bundled;
+
+		__private.processVerifyTransaction(transaction, true, function (err, sender) {
+			if (err) {
+				library.logger.debug('Failed to process / verify bundled transaction: ' + transaction.id, err);
+				self.removeUnconfirmedTransaction(transaction);
+				return setImmediate(eachSeriesCb);
+			} else {
+				self.queueTransaction(transaction, function (err) {
+					if (err) {
+						library.logger.debug('Failed to queue bundled transaction: ' + transaction.id, err);
+					}
 					return setImmediate(eachSeriesCb);
-				} else {
-					self.queueTransaction(transaction, function (err) {
-						if (err) {
-							library.logger.debug('Failed to queue bundled transaction: ' + transaction.id, err);
-						}
-						return setImmediate(eachSeriesCb);
-					});
-				}
-			});
-		}, function (err) {
-			return setImmediate(cb, err);
+				});
+			}
 		});
-	}, cb);
+	}, function (err) {
+		return setImmediate(cb, err);
+	});
 };
 
 /**
@@ -552,25 +547,22 @@ TransactionPool.prototype.applyUnconfirmedIds = function (ids, cb) {
 TransactionPool.prototype.undoUnconfirmedList = function (cb) {
 	var ids = [];
 
-	// Execute in sequence via balancesSequence
-	library.balancesSequence.add(function (cb) {
-		async.eachSeries(self.getUnconfirmedTransactionList(false), function (transaction, eachSeriesCb) {
-			if (transaction) {
-				ids.push(transaction.id);
-				modules.transactions.undoUnconfirmed(transaction, function (err) {
-					if (err) {
-						library.logger.error('Failed to undo unconfirmed transaction: ' + transaction.id, err);
-						self.removeUnconfirmedTransaction(transaction.id);
-					}
-					return setImmediate(eachSeriesCb);
-				});
-			} else {
+	async.eachSeries(self.getUnconfirmedTransactionList(false), function (transaction, eachSeriesCb) {
+		if (transaction) {
+			ids.push(transaction.id);
+			modules.transactions.undoUnconfirmed(transaction, function (err) {
+				if (err) {
+					library.logger.error('Failed to undo unconfirmed transaction: ' + transaction.id, err);
+					self.removeUnconfirmedTransaction(transaction.id);
+				}
 				return setImmediate(eachSeriesCb);
-			}
-		}, function (err) {
-			return setImmediate(cb, err, ids);
-		});
-	}, cb);
+			});
+		} else {
+			return setImmediate(eachSeriesCb);
+		}
+	}, function (err) {
+		return setImmediate(cb, err, ids);
+	});
 };
 
 /**
@@ -759,30 +751,27 @@ __private.processVerifyTransaction = function (transaction, broadcast, cb) {
  * @return {setImmediateCallback} error | cb
  */
 __private.applyUnconfirmedList = function (transactions, cb) {
-	// Execute in sequence via balancesSequence
-	library.balancesSequence.add(function (cb) {
-		async.eachSeries(transactions, function (transaction, eachSeriesCb) {
-			if (typeof transaction === 'string') {
-				transaction = self.getUnconfirmedTransaction(transaction);
-			}
-			if (!transaction) {
+	async.eachSeries(transactions, function (transaction, eachSeriesCb) {
+		if (typeof transaction === 'string') {
+			transaction = self.getUnconfirmedTransaction(transaction);
+		}
+		if (!transaction) {
+			return setImmediate(eachSeriesCb);
+		}
+		__private.processVerifyTransaction(transaction, false, function (err, sender) {
+			if (err) {
+				library.logger.error('Failed to process / verify unconfirmed transaction: ' + transaction.id, err);
+				self.removeUnconfirmedTransaction(transaction.id);
 				return setImmediate(eachSeriesCb);
 			}
-			__private.processVerifyTransaction(transaction, false, function (err, sender) {
+			modules.transactions.applyUnconfirmed(transaction, sender, function (err) {
 				if (err) {
-					library.logger.error('Failed to process / verify unconfirmed transaction: ' + transaction.id, err);
+					library.logger.error('Failed to apply unconfirmed transaction: ' + transaction.id, err);
 					self.removeUnconfirmedTransaction(transaction.id);
-					return setImmediate(eachSeriesCb);
 				}
-				modules.transactions.applyUnconfirmed(transaction, sender, function (err) {
-					if (err) {
-						library.logger.error('Failed to apply unconfirmed transaction: ' + transaction.id, err);
-						self.removeUnconfirmedTransaction(transaction.id);
-					}
-					return setImmediate(eachSeriesCb);
-				});
+				return setImmediate(eachSeriesCb);
 			});
-		}, cb);
+		});
 	}, cb);
 };
 

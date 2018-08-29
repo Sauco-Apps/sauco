@@ -102,7 +102,7 @@ module.exports = {
 	minBroadhashConsensus: 51,
 	nethashes: [
 		// Mainnet
-		'942b858319e5169e76b1410446fa389fd2d2bc2da264b038726efb3bdab3d481',
+		'fe561132f28c3d6da8690c42fd4be8c5bcdad7b5a74d7f4e13355c7aef1e75ad',
 		// Testnet
 		'1bce8da0d6e616482de1ebf920ef3875e166332affdd70f9a8a689babce54420'
 	],
@@ -110,17 +110,17 @@ module.exports = {
 	requestLength: 104,
 	teamAccounts: [
 		// Mainnet
-		'6c56a95f9ea891aa35f264a32baa112a228cb534ff94ceecfe82c5b5c70d15d0',
+		'3160fdb9e0049c8ccb47e37421e6df20cc274e0c47edbe0b8004c8cc02585a0a',
 		// Testnet
 		'e3d2571579cf7fd03e388442a514e349a604f9d3d42ade2aa2767194f5fe3802'
 	],	
 	rewards: [
-		{ height: 1,        reward: 0,         salary: 0 },
-		{ height: 2,        reward: 100000000, salary: 10000000 },
-		{ height: 3,        reward: 0, salary: 0 },
-		{ height: 64000,     reward: 250000000, salary: 25000000 },
-		{ height: 288000,    reward: 200000000, salary: 20000000 },
-		{ height: 1168001,  reward: 150000000, salary: 15000000 }
+		{ height: 1,        reward: 0 },
+		{ height: 2,        reward: 100000000 },
+		{ height: 3,        reward: 0 },
+		{ height: 64000,     reward: 250000000 },
+		{ height: 288000,    reward: 200000000 },
+		{ height: 1168001,  reward: 150000000 }
 	],
 	signatureLength: 196,
 	totalAmount: 1000000000000000,
