@@ -11,6 +11,7 @@ mkdir -p $root_path/logs
 logfile=$root_path/logs/sauco_manager.log
 
 SCRIPT_NAME="saucoPool"
+TRACKER_NAME="saucoTracker"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 . "$(pwd)/shared.sh"
@@ -306,7 +307,7 @@ start_tracker(){
    check_tracker
    exit 1
  else
-   forever start -u Sauco_Tracker --pidFile $PID_TRACKER -m 1 ./sauco_tracker/bin/cmd.js -p 7000 &> /dev/null
+   forever start -u $TRACKER_NAME -a -l $LOG_APP_FILE --pidFile $PID_TRACKER -m 1./sauco_tracker/bin/cmd.js -p 7000 &> /dev/null
    if [ $? == 0 ]; then
      echo "√ Sauco_Tracker started successfully."
      sleep 3
@@ -320,7 +321,7 @@ start_tracker(){
 stop_tracker(){
  if check_tracker != 1 &> /dev/null; then
    stopTracker=0
-   while [[ $stopPool < 5 ]] &> /dev/null; do
+   while [[ $stopTracker < 5 ]] &> /dev/null; do
      forever stop -t $PID --killSignal=SIGTERM &> /dev/null
      if [ $? !=  0 ]; then
        echo "X Failed to stop Sauco Tracker."
@@ -329,7 +330,7 @@ stop_tracker(){
        break
      fi
      sleep .5
-     stopPool=$[$stopTracker+1]
+     stopTracker=$[$stopTracker+1]
    done
  else
    echo "√ Sauco Tracker is not running."
