@@ -303,58 +303,47 @@ install_tracker() {
 }
 
 start_tracker(){
- if check_tracker == 1 &> /dev/null; then
-   check_tracker
-   exit 1
- else
-   forever start -u $TRACKER_NAME -a -l $LOG_APP_FILE --pidFile $PID_TRACKER -m 1./sauco_tracker/bin/cmd.js -p 7000 &> /dev/null
-   if [ $? == 0 ]; then
-     echo "√ Sauco_Tracker started successfully."
-     sleep 3
-     check_tracker
-   else
-     echo "X Failed to start Sauco Tracker."
-   fi
- fi
+
+  echo -n "Starting Sauco Tracker... "
+    forever_exists=$(whereis forever | awk {'print $2'})
+    if [[ ! -z $forever_exists ]]; then
+        $forever_exists start -u $TRACKER_NAME -a -l $LOG_APP_FILE --pidFile $PID_TRACKER -m 1 ./sauco-tracker/bin/cmd.js -p 7000 &> $logfile || \
+        { echo -e "\nCould not start Sauco Tracker." && exit 1; }
+    fi
+
+    sleep 2
+
+    if check_tracker; then
+        echo "OK"
+        return 0
+    fi
+    echo
+    return 1
 }
 
 stop_tracker(){
- if check_tracker != 1 &> /dev/null; then
-   stopTracker=0
-   while [[ $stopTracker < 5 ]] &> /dev/null; do
-     forever stop -t $PID --killSignal=SIGTERM &> /dev/null
-     if [ $? !=  0 ]; then
-       echo "X Failed to stop Sauco Tracker."
-     else
-       echo "√ Sauco Tracker stopped successfully."
-       break
-     fi
-     sleep .5
-     stopTracker=$[$stopTracker+1]
-   done
- else
-   echo "√ Sauco Tracker is not running."
- fi
+ echo -n "Stopping Sauco Tracker... "
+    forever_exists=$(whereis forever | awk {'print $2'})
+    if [[ ! -z $forever_exists ]]; then
+        $forever_exists stop $root_path/sauco-tracker/bin/cmd.js &>> $logfile
+    fi
+
+    sleep 2
+
+    if ! running; then
+        echo "OK"
+        return 0
+    fi
+    echo
+    return 1
 }
 
 check_tracker(){
- if [ -f "$PID_TRACKER" ]; then
-   PID="$(cat "$PID_TRACKER")"
- fi
- if [ ! -z "$PID" ]; then
-   ps -p "$PID" > /dev/null 2>&1
-   STATUS=$?
- else
-   STATUS=1
- fi
-
- if [ -f $PID_TRACKER ] && [ ! -z "$PID" ] && [ $STATUS == 0 ]; then
-   echo "√ Sauco Tracker is running as PID: $PID"
-   return 0
- else
-   echo "X Sauco Tracker is not running."
-   return 1
- fi
+ process=$(forever list |grep $TRACKER_NAME |awk {'print $9'})
+    if [[ -z $process ]] || [[ "$process" == "STOPPED" ]]; then
+        return 1
+    fi
+    return 0
 }
 
 update_manager() {
