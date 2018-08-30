@@ -295,7 +295,7 @@ install_tracker() {
  echo "Instalando Tracker Sauco Platform..."
  git clone https://github.com/Sauco-Apps/sauco-tracker.git &>> $logfile || { echo -e "\n\n No se pudo instalar el tracker." && exit 1; }
  cd sauco-tracker
- npm install
+ npm install --unsafe-perm &>> $logfile || { echo -e "\n\n Error al intentar instalar." && exit 1; }
  cd ..
 
  start_tracker
