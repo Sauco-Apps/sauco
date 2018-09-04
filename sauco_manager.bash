@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.3.1"
+version="1.3.2"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -439,22 +439,22 @@ start_sauco() {
     return 1
 }
 
-  start_snapshot() {
-    echo -n "Starting Sauco (snapshot mode) ... "
-    forever_exists=$(whereis forever | awk {'print $2'})
-    if [[ ! -z $forever_exists ]]; then
-        $forever_exists start -e $root_path/logs/snapshot_err.log app.js -c "$SHIFT_CONFIG" -s highest &>> $logfile || \
-        { echo -e "\nCould not start Sauco." && exit 1; }
-    fi
+start_snapshot() {
+  echo -n "Starting Sauco (snapshot mode) ... "
+  forever_exists=$(whereis forever | awk {'print $2'})
+  if [[ ! -z $forever_exists ]]; then
+      $forever_exists start -e $root_path/logs/snapshot_err.log app.js -c "$SHIFT_CONFIG" -s highest &>> $logfile || \
+      { echo -e "\nCould not start Sauco." && exit 1; }
+  fi
 
-    sleep 2
+  sleep 2
 
-    if running; then
-        echo "OK"
-        return 0
-    fi
-    echo
-    return 1
+  if running; then
+      echo "OK"
+      return 0
+  fi
+  echo
+  return 1
 }
 
 running() {
@@ -497,13 +497,14 @@ start_log() {
 }
 
 install_pool(){
-  npm install gulp -g
+  echo "installing sauco pool, do not forget to edit your config.json..."
+  npm install gulp -g &>> $logfile || { echo "Error al instalar Gulp de forma global." && exit 1; }
   cd public_src
-  bower --allow-root install
-  npm install
-  gulp release
+  bower --allow-root install &>> $logfile || { echo "Error al intentar instalar dependencias Bower." && exit 1; }
+  npm install &>> $logfile || { echo "Error al instalar dependencias NPM." && exit 1; }
+  gulp release &>> $logfile || { echo "Error al realizar gulp release." && exit 1; }
   cd ..
-  npm install
+  npm install &>> $logfile || { echo "error al ejecutar NPM en la raiz." && exit 1; }
 
   autostart_pool
   start_pool
