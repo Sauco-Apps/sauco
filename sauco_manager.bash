@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.3.3"
+version="1.3.4"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -78,16 +78,41 @@ install_prereq() {
     sudo id &> /dev/null || { exit 1; };
 
     echo ""
-    echo "-------------------------------------------------------"
-    echo "Sauco installer script. Version: $version"
-    echo "-------------------------------------------------------"
+    echo "----------------------------------------"
+    echo "Sauco Manager v$version"
+    echo "----------------------------------------"
+    echo "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOOOOOOOO777OOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOOOOO7777777OOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOO7777777777OOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOO7777777777OOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOO7777777777OOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOO7777777777OOOOOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOO777777777OOOOOO77777777777OOOOOOOO"
+    echo "OOOO77777777OOOOOO7777777777777777OOOOOO"
+    echo "OOOO77777OOOOO77777777777OOO7777777OOOOO"
+    echo "OOO77777OOO7777777777OOOOOOOOOO77777OOOO"
+    echo "OOO77777OO77777777OOOOOO777777O77777OOOO"
+    echo "OOO77777OO77777OOOOOO777777777O77777OOOO"
+    echo "OOOO777777OOOOOOOO777777777OOOO77777OOOO"
+    echo "OOOOO7777777777777777777OOOOOO777777OOOO"
+    echo "OOOOOOO77777777777777OOOOO777777777OOOOO"
+    echo "OOOOOOOOO777777777OOOOO7777777777OOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOOOO7777777777OOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOO77777777777OOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOO777777777OOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOO7777777777OOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOO77777OOOOOOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOO7OOOOOOOOOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+    echo "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
     
     echo -n "Running: apt-get update... ";
     sudo apt-get update  &> /dev/null || \
     { echo "Could not update apt repositories. Run apt-get update manually. Exiting." && exit 1; };
     echo -e "done.\n"
 
-    echo -n "Running: apt-get install curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils ... ";
+    echo -n "Installing prerequisites ... ";
     sudo apt-get install -y -qq curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils redis-server &>> $logfile || \
     { echo "Could not install packages prerequisites. Exiting." && exit 1; };
     echo -e "done.\n"
@@ -235,20 +260,13 @@ start_postgres() {
 
 install_node_npm() {
 
+    echo -n "Installing npm..."
+    sudo apt-get install -y npm &>> $logfile
+
     echo -n "Installing nodejs... "
-    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &>> $logfile
-    sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
+    sudo apt-get install -y nodejs &>> $logfile || { echo "Could not install nodejs." && exit 1; } 
 
-    result=$(npm -v)
-
-    if [[ $result == *no* ]] 
-    then
-      echo -n "Installing npm..."
-      install_dependencias
-      sudo apt-get install -y npm &>> $logfile || { echo "Error forzando instalación de npm." && exit 1; } 
-    else
-      install_dependencias
-    fi
+    install_dependencias
 
     return 0;
 }
