@@ -2,7 +2,7 @@
 
 ## Installation
 
-Automatic install script for Debian based systems Ubuntu, Mint, Debian.
+Automatic install script for Debian based systems Ubuntu 16.04 LTS / 18.04 LTS, Mint, Debian.
 
 Install Sauco (MainNet)
 ```
