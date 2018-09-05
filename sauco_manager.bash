@@ -2,7 +2,7 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-version="1.3.2"
+version="1.3.3"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 root_path=$(pwd)
@@ -235,16 +235,18 @@ start_postgres() {
 
 install_node_npm() {
 
-    echo -n "Installing nodejs and npm... "
+    echo -n "Installing nodejs... "
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &>> $logfile
     sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
 
-    result=$(dpkg -l | grep npm)
-    if [[ $result == "" ]] 
+    result=$(npm -v)
+
+    if [[ $result == *no* ]] 
     then
+      echo -n "Installing npm..."
       install_dependencias
-    else
       sudo apt-get install -y npm &>> $logfile || { echo "Error forzando instalación de npm." && exit 1; } 
+    else
       install_dependencias
     fi
 
