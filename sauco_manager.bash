@@ -239,8 +239,9 @@ install_node_npm() {
     curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &>> $logfile
     sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
 
-    CMDS=("npm")
-    if check_cmds CMDS[@]; then
+    result=$(dpkg -l | grep npm)
+    if [[ $result == "" ]] 
+    then
       install_dependencias
     else
       sudo apt-get install -y npm &>> $logfile || { echo "Error forzando instalación de npm." && exit 1; } 
