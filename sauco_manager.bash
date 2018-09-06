@@ -105,7 +105,6 @@ install_prereq() {
     echo "OOOOOOOOOOOO77777OOOOOOOOOOOOOOOOOOOOOOO"
     echo "OOOOOOOOOOOOO7OOOOOOOOOOOOOOOOOOOOOOOOOO"
     echo "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
-    echo "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
     
     echo -n "Running: apt-get update... ";
     sudo apt-get update  &> /dev/null || \
@@ -264,7 +263,8 @@ install_node_npm() {
     sudo apt-get install -y npm &>> $logfile
 
     echo -n "Installing nodejs... "
-    sudo apt-get install -y nodejs &>> $logfile || { echo "Could not install nodejs." && exit 1; } 
+    curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - &>> $logfile
+    sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
 
     install_dependencias
 
