@@ -263,7 +263,7 @@ install_node_npm() {
     sudo apt-get install -y npm &>> $logfile
 
     echo -n "Installing nodejs... "
-    curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - &>> $logfile
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &>> $logfile
     sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
 
     install_dependencias
