@@ -54,7 +54,8 @@ function Transactions (cb, scope) {
 		scope.config.broadcasts.releaseLimit,
 		scope.logic.transaction,
 		scope.bus,
-		scope.logger
+		scope.logger,
+		scope.balancesSequence
 	);
 
 	__private.assetTypes[transactionTypes.SEND] = library.logic.transaction.attachAssetType(
@@ -120,7 +121,7 @@ __private.list = function (filter, cb) {
 			throw new Error('Invalid parameter supplied: ' + key);
 		}
 
-		// Mutating parametres when unix timestamp is supplied
+		// Mutating parameters when unix timestamp is supplied
 		if (_.includes(['fromUnixTime', 'toUnixTime'], field[1])) {
 			// Lisk epoch is 1464109200 as unix timestamp
 			value = value - constants.epochTime.getTime() / 1000;
@@ -517,7 +518,7 @@ Transactions.prototype.applyUnconfirmed = function (transaction, sender, cb) {
 				library.logic.transaction.applyUnconfirmed(transaction, sender, requester, cb);
 			});
 		} else {
-			library.logic.transaction.applyUnconfirmed(transaction, sender, cb);
+			library.logic.transaction.applyUnconfirmed(transaction, sender, null, cb);
 		}
 	}
 };
@@ -569,7 +570,7 @@ Transactions.prototype.fillPool = function (cb) {
  * @param {function} cb - Callback function.
  */
 Transactions.prototype.sandboxApi = function (call, args, cb) {
-	sandboxHelper.callMethod(shared, call, args, cb);
+	sandboxHelper.callMethod(this.shared, call, args, cb);
 };
 
 /**
@@ -661,7 +662,7 @@ Transactions.prototype.shared = {
 					return setImmediate(cb, 'Transaction not found');
 				}
 
-				if (transaction.type === 3) {
+				if (transaction.type === transactionTypes.VOTE) {
 					__private.getVotesById(transaction, function (err, transaction) {
 						return setImmediate(cb, null, {transaction: transaction});
 					});
@@ -725,6 +726,11 @@ Transactions.prototype.shared = {
 			}
 
 			var query = {address: req.body.recipientId};
+
+			// Needs fix: Reject transactions with requesterPublicKey property for now
+			if (req.body.requesterPublicKey) {
+				return setImmediate(cb, 'Multisig request is not allowed');
+			}
 
 			library.balancesSequence.add(function (cb) {
 				modules.accounts.getAccount(query, function (err, recipient) {
