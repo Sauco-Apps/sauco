@@ -65,7 +65,7 @@ DB_PASSWD="$(grep "password" $SHIFT_CONFIG | cut -f 4 -d '"' | head -1)"
 DB_SNAPSHOT="blockchain.gz"
 NETWORK=""
 set_network
-BLOCKCHAIN_URL="https://sauco.io/snapshot/$NETWORK"
+BLOCKCHAIN_URL="https://download.sauco.io/$NETWORK"
 GIT_BRANCH="$(git branch | sed -n '/\* /s///p')"
 
 install_prereq() {
